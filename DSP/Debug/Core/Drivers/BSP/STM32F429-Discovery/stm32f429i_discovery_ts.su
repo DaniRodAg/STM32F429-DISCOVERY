@@ -1,0 +1,5 @@
+../Core/Drivers/BSP/STM32F429-Discovery/stm32f429i_discovery_ts.c:85:9:BSP_TS_Init	24	static
+../Core/Drivers/BSP/STM32F429-Discovery/stm32f429i_discovery_ts.c:116:9:BSP_TS_ITConfig	8	static
+../Core/Drivers/BSP/STM32F429-Discovery/stm32f429i_discovery_ts.c:128:9:BSP_TS_ITGetStatus	8	static
+../Core/Drivers/BSP/STM32F429-Discovery/stm32f429i_discovery_ts.c:138:6:BSP_TS_GetState	32	static
+../Core/Drivers/BSP/STM32F429-Discovery/stm32f429i_discovery_ts.c:230:6:BSP_TS_ITClear	8	static

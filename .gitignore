@@ -1,0 +1,6 @@
+# Ignorar archivos innecesarios
+
+*.o
+*.rar
+*.zip
+
