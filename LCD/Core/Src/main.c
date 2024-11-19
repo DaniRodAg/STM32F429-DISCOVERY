@@ -53,10 +53,15 @@
 #define Avg_Slope (float)2.5
 #define ADC_RES   4096
 #define Vref			(uint8_t)3
-#define SAMPLE_RATE 24
-#define FRECUENCIA 12
-#define BUFFER_SIZE 312*SAMPLE_RATE/FRECUENCIA
+#define SAMPLE_RATE 12000
+#define FRECUENCIA  36000
+#define BUFFER_SIZE 626*SAMPLE_RATE/FRECUENCIA
 #define M_PI 3.1415925
+
+//const uint32_t SAMPLE_RATE = 12000; // Ejemplo de valor
+//const uint32_t FRECUENCIA = 1000;   // Ejemplo de valor
+//const uint32_t BUFFER_SIZE = (uint32_t)(626 * SAMPLE_RATE / FRECUENCIA);
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/

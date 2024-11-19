@@ -34,6 +34,8 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <math.h>
+//#include "LOWPASSFILTER.h"
+//#include "LOWPASSFILTER2ND.h"
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery.h"
 #include "stm32f429i_discovery_ts.h"
@@ -53,8 +55,21 @@
 #define Vref			(uint8_t)3
 #define SAMPLE_RATE 24
 #define FRECUENCIA 24
-//#define BUFFER_SIZE 312*SAMPLE_RATE/FRECUENCIA
-#define BUFFER_SIZE 100
+#define BUFFER_SIZE 320
+
+
+#define yn_0 1
+#define yn_1 1.9637
+#define yn_2 -0.9644
+#define xn_0 1
+#define xn_1 2
+#define xn_2 1
+
+#define G_i 0.2
+
+
+
+//#define BUFFER_SIZE 100
 #define M_PI 3.1415925
 /* USER CODE END PD */
 
@@ -74,11 +89,16 @@ char texto[40];
 uint32_t input_val = 0;
 uint32_t dac_data[BUFFER_SIZE];
 __IO uint32_t adc_data[BUFFER_SIZE];
+__IO uint32_t low_pass_data[BUFFER_SIZE];
+__IO uint32_t prev_dac_data[BUFFER_SIZE];
+__IO uint32_t prev_adc_data[BUFFER_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+void Low_Pass_Filter(void);
+void print_Sine_Wave(void);
 void BSP_LCD_printf(char line, const char *text);
 void Generate_Sine_Wave(uint32_t *buffer, uint32_t buff_size, uint32_t amplitude);
 /* USER CODE END PFP */
@@ -87,15 +107,40 @@ void Generate_Sine_Wave(uint32_t *buffer, uint32_t buff_size, uint32_t amplitude
 /* USER CODE BEGIN 0 */
 /* Callback que se llama al completarse la conversión del ADC */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+	//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_2, &adc_data, BUFFER_SIZE, DAC_ALIGN_12B_R);
     if (hadc->Instance == ADC1) {
-    	BSP_LED_On(LED3);
+    	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
         //Procesa los datos del buffer
-    	sprintf(texto,"%d",adc_data[1]);
-    	BSP_LCD_DisplayStringAt(0, 112, texto, CENTER_MODE, 0);
 	    //Graficar los datos del ADC en la pantalla LCD
-
+    	Low_Pass_Filter();
+    	//print_Sine_Wave();
     }
 }
+
+void Low_Pass_Filter(void){
+	for (int n = 0; n < BUFFER_SIZE; n++)
+	{
+		/*ORDEN 2*/
+		if(n==0){
+			dac_data[n] = (xn_0*adc_data[n]+xn_1*prev_adc_data[BUFFER_SIZE-1]+xn_2*prev_adc_data[BUFFER_SIZE-2]+yn_1*prev_dac_data[BUFFER_SIZE-1]+yn_2*prev_dac_data[BUFFER_SIZE-2])*G_i ;
+		}
+
+		else if(n==1){
+			dac_data[n] = (xn_0*adc_data[n]+xn_1*adc_data[n-1]+xn_2*prev_adc_data[BUFFER_SIZE-2]+yn_1*dac_data[n-1]+yn_2*prev_dac_data[BUFFER_SIZE-2])*G_i ;
+		}
+		else{
+			dac_data[n] = (xn_0*adc_data[n]+xn_1*adc_data[n-1]+xn_2*adc_data[n-2]+yn_1*dac_data[n-1]+yn_2*dac_data[n-2])*G_i ;
+		}
+		prev_adc_data[n] = adc_data[n];
+	    prev_dac_data[n] = dac_data[n];
+	}
+}
+
+
+
+
+
+
 /*
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
 {
@@ -173,9 +218,9 @@ int main(void)
 	BSP_LCD_DrawHLine(0, 11, 240);
 	BSP_LCD_DrawVLine(11, 0, 320);
 	contador=0;
-	Generate_Sine_Wave(dac_data, BUFFER_SIZE, ADC_RES/2); // 2048 para señal de 12 bits (amplitud)
-	//HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_2, dac_data, BUFFER_SIZE, DAC_ALIGN_12B_R);
-	//HAL_TIM_Base_Start(&htim2);
+	//Generate_Sine_Wave(dac_data, BUFFER_SIZE, ADC_RES/2); // 2048 para señal de 12 bits (amplitud)
+	HAL_DAC_Start_DMA(&hdac, DAC_CHANNEL_2, &dac_data, BUFFER_SIZE, DAC_ALIGN_12B_R);
+	HAL_TIM_Base_Start(&htim2);
 
 	  if(HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_data, BUFFER_SIZE) != HAL_OK)
 	  {
@@ -255,7 +300,27 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void print_Sine_Wave(void){
+	//BSP_LCD_Clear(LCD_COLOR_BLACK);
+	sprintf(texto,"%.4d",adc_data[1]);
+	BSP_LCD_DisplayStringAt(13, 185, texto, LEFT_MODE, 0);
+	sprintf(texto,"%d KHz",FRECUENCIA);
+	BSP_LCD_DisplayStringAt(0, 224, texto, CENTER_MODE, 0);
+	//BSP_LCD_DisplayStringAtLine(14,(uint8_t*)"24KHz", 0);
+	BSP_LCD_DisplayStringAt(0, 0, "Input Signal", CENTER_MODE, 0);
+	BSP_LCD_DisplayStringAt(0, 0, "Voltage", CENTER_MODE, 1);
 
+	for (int i = 0; i < BUFFER_SIZE; i++)
+	        {
+				BSP_LCD_DrawPixel(12 + prev_adc_data[i] / 20, i + 12, LCD_COLOR_BLACK);
+				BSP_LCD_DrawPixel(12 + adc_data[i] / 20, i + 12, LCD_COLOR_RED);
+
+				//BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+				prev_adc_data[i] = adc_data[i];
+	        }
+
+
+}
 
 
 void Generate_Sine_Wave(uint32_t *buffer, uint32_t buff_size, uint32_t amplitude)
@@ -330,4 +395,4 @@ void assert_failed(uint8_t *file, uint32_t line)
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
-#endif /* USE_FULL_ASSERT */
+#endif /* USE_FULL_ASSERT */
