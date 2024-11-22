@@ -1,0 +1,37 @@
+./objects/stm32f4xx_it.o: User\stm32f4xx_it.c User\stm32f4xx_it.h \
+  ..\..\STM32\Libraries\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h \
+  ..\..\STM32\Libraries\CMSIS\Include\core_cm4.h \
+  ..\..\STM32\Libraries\CMSIS\Include\core_cmInstr.h \
+  ..\..\STM32\Libraries\CMSIS\Include\core_cmFunc.h \
+  ..\..\STM32\Libraries\CMSIS\Include\core_cmSimd.h \
+  ..\..\STM32\Libraries\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h \
+  User\stm32f4xx_conf.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_adc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_crc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dbgmcu.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_exti.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_flash.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_gpio.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_i2c.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_iwdg.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_pwr.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rcc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rtc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sdio.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_spi.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_syscfg.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_tim.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_usart.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_cryp.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_hash.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_rng.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_can.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dma2d.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fmc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_ltdc.h \
+  ..\..\STM32\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_sai.h

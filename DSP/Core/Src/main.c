@@ -283,7 +283,7 @@ void Low_Pass_Filter(void){
 
 					)*LP_Filter.G_i ;
 		}
-		dac_data[n] = ((int32_t)(dacf_data[n]*2048)) + 2048;
+		dac_data[n] = ((int32_t)(dacf_data[n]*2048)) + 2048;v|
 		prev_adcf_data[n] = adcf_data[n];
 	    prev_dacf_data[n] = dacf_data[n];
 	}
